@@ -1,0 +1,169 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+package Mine.Commerce.v1;
+
+service Greeter {
+
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}
+
+service Products {
+  rpc GetProduct (GetProductRequest) returns (GetProductResponse);
+  rpc GetProductList (GetProductListRequest) returns (GetProductListResponse);
+  rpc GetOrder (GetOrderRequest) returns (GetOrderResponse);
+  rpc GetAllCategories (google.protobuf.Empty) returns (GetAllCategoriesResponse);
+  rpc GetAllBrands (google.protobuf.Empty) returns (GetAllBrandsResponse);
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+  //rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderResponse);
+}
+
+message GetAllCategoriesResponse{
+  int32 status_code = 1;//0: success, > 0: error
+  string message = 2;//empty: no error
+  ResponseData response_data = 3;
+
+  message ResponseData{
+    repeated CategoryResponse list_category = 1;
+    
+  }
+}
+
+message GetAllBrandsResponse{
+  int32 status_code = 1;//0: success, > 0: error
+  string message = 2;//empty: no error
+  ResponseData response_data = 3;
+
+  message ResponseData{
+    repeated BrandResponse list_brand = 1;
+  }
+}
+
+message GetProductRequest {
+  string id = 1;
+}
+
+message GetProductResponse {
+  int32 status_code = 1;//0: success, > 0: error
+  string message = 2;//empty: no error
+  ResponseData response_data = 3;
+
+  message ResponseData{
+    ProductResponse product = 1;
+  }
+}
+
+message GetProductListRequest {
+  repeated string list_id = 1;//Let empty to get all
+}
+
+message GetProductListResponse {
+  int32 status_code = 1;//0: success, > 0: error
+  string message = 2;//empty: no error
+  ResponseData response_data = 3;
+
+  message ResponseData{
+    repeated ProductResponse list_product = 1;
+  }
+}
+
+message GetOrderRequest {
+  string id = 1;
+  string number = 2;
+}
+
+message GetOrderResponse {
+  int32 status_code = 1;//0: success, > 0: error
+  string message = 2;//empty: no error
+  ResponseData response_data = 3;
+
+  message ResponseData {
+    OrderResponse order = 1;
+  }
+}
+
+message CreateOrderRequest {
+  string customer_name = 1;
+  string customer_email = 2;
+  google.protobuf.Timestamp delivery_time = 3;
+  Address deliver_address = 4;
+  OrderDetailRequest order_detail_request = 5;
+}
+
+message CreateOrderResponse {
+  int32 status_code = 1;//0: success, > 0: error
+  string message = 2;//empty: no error
+  ResponseData response_data = 3;
+
+  message ResponseData {
+    OrderResponse order = 1;
+  }
+}
+
+//----Common
+message BrandResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message CategoryResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ProductResponse {
+  string id = 1;
+  string name = 2;
+  bool is_active = 3;
+  bool in_stock = 4;
+  string product_code = 5;
+  BrandResponse brand = 6;
+  CategoryResponse category = 7;
+  double price = 8;
+  string description =9;
+}
+
+message OrderResponse {
+ string id = 1;
+ string number = 2;
+ string customer_name = 3;
+ string customer_email = 4;
+ Address address = 5;
+ OrderDetailResponse order_detail = 6;
+}
+
+message OrderDetailResponse {
+  repeated ProductOrderResponse list_product_order = 1;
+
+  message ProductOrderResponse {
+    string id = 1;
+    int32 amount = 2;
+    double price = 3;
+    double total_price = 4;
+  }
+}
+
+message OrderDetailRequest {
+  repeated ProductOrderRequest list_product_order = 1;
+
+  message ProductOrderRequest {
+    string id = 1;
+    int32 amount = 2;
+    double price = 3;
+  }
+}
+message Address {
+  string city = 1;
+  string district = 2;
+  string street = 3;
+  string street_no = 4;
+  string post_code = 5;
+}

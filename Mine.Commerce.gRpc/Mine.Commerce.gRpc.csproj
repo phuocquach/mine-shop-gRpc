@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>1.1.6</Version>
+    <IsPackable>true</IsPackable>
+    <Copyright>Phuoc Quach - SD3540</Copyright>
+    <PackageOutputPath>..\..\store-service\gRpc\package</PackageOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Mine.Commerce.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProtoBuf Include="..\protos\Mine.Commerce.proto">
+      <Link>Mine.Commerce.proto</Link>
+    </ProtoBuf>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.12.3" />
+    <PackageReference Include="Grpc" Version="2.30.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.30.0" />
+  </ItemGroup>
+</Project>
